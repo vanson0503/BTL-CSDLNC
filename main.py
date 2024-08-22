@@ -1,6 +1,5 @@
 import os
 from datetime import datetime
-
 from flask import Flask, render_template, redirect, url_for, request, session, flash
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -20,13 +19,22 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 
 # Kết nối tới MongoDB sử dụng MongoClient
 client = MongoClient(app.config['MONGO_URI'])
-db = client.get_database()  # Lấy database từ URI đã cấu hình
+db = client["libraryDB"]
 
 @app.route('/')
 def index():
     if 'user' in session:
-        return render_template('index.html', user=session['user'])
+        # Fetch counts from the database
+        num_staff = db.staffs.count_documents({})
+        num_users = db.users.count_documents({})
+        num_books = db.books.count_documents({})
+        num_available_books = db.books.count_documents({'availableCopies': {'$gt': 0}})
+
+        # Render the index template with the fetched data
+        return render_template('index.html', user=session['user'], num_staff=num_staff, num_users=num_users,
+                               num_books=num_books, num_available_books=num_available_books)
     return redirect(url_for('login'))
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -37,10 +45,8 @@ def login():
         email = request.form['email']
         password = request.form['password']
         collections = db.list_collection_names()
-        print("Kết nối đến MongoDB thành công! Các collections có trong cơ sở dữ liệu:")
-        for collection in collections:
-            print(collection)
-        user = db.staff.find_one({'email': email, 'password': password})
+
+        user = db.staffs.find_one({'email': email, 'password': password})
         if user:
             session['user'] = user['name']
             session['role'] = user['role']
@@ -315,7 +321,7 @@ def manage_staffs():
     if 'user' not in session:
         return redirect(url_for('login'))
 
-    staffs = list(db.staff.find())
+    staffs = list(db.staffs.find())
     return render_template('manage_staffs.html', staffs=staffs)
 
 
@@ -330,7 +336,7 @@ def add_staff():
     role = request.form['role']
     start_time = request.form['start_time']
     end_time = request.form['end_time']
-    db.staff.insert_one({
+    db.staffs.insert_one({
         'name': name,
         'email': email,
         'password': password,
@@ -354,7 +360,7 @@ def edit_staff(id):
     role = request.form['role']
     start_time = request.form['start_time']
     end_time = request.form['end_time']
-    db.staff.update_one({'_id': ObjectId(id)}, {
+    db.staffs.update_one({'_id': ObjectId(id)}, {
         '$set': {
             'name': name,
             'email': email,
@@ -373,7 +379,7 @@ def delete_staff(id):
     if 'user' not in session:
         return redirect(url_for('login'))
 
-    db.staff.delete_one({'_id': ObjectId(id)})
+    db.staffs.delete_one({'_id': ObjectId(id)})
     return redirect(url_for('manage_staffs'))
 
 
@@ -388,7 +394,7 @@ def manage_borrowing_history():
     borrowing_history = list(db.borrowing_history.find())
     users = list(db.users.find())
     books = list(db.books.find())
-    staffs = list(db.staff.find())
+    staffs = list(db.staffs.find())
 
     # Chuyển ObjectId thành chuỗi và xây dựng từ điển
     users_dict = {str(user['_id']): user['name'] for user in users}
@@ -487,4 +493,4 @@ def edit_borrowing(id):
     return redirect(url_for('manage_borrowing_history'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080)

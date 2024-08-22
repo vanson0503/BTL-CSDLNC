@@ -2,7 +2,8 @@
 <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>Dashboard</title>
 
     <!-- Favicon -->
@@ -17,113 +18,158 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/demo.css') }}">
 </head>
 <body>
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
-            <!-- Sidebar Menu -->
-            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-                <div class="app-brand demo">
-                    <a href="/" class="app-brand-link">
-                        <span class="app-brand-logo demo">
-                            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="40">
-                        </span>
-                        <span class="app-brand-text demo menu-text fw-bolder ms-2">My Dashboard</span>
+<!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <!-- Sidebar Menu -->
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+            <div class="app-brand demo">
+                <a href="/" class="app-brand-link">
+
+                    <span class="app-brand-text demo menu-text fw-bolder ms-2">My Dashboard</span>
+                </a>
+            </div>
+
+            <ul class="menu-inner py-1">
+                <li class="menu-item">
+                    <a href="{{ url_for('index') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                        <div>Dashboard</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ url_for('manage_publishers') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-book"></i>
+                        <div>Manage Publishers</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ url_for('manage_genres') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-category"></i>
+                        <div>Manage Genres</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ url_for('manage_books') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-category"></i>
+                        <div>Manage Books</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ url_for('manage_users') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-user"></i>
+                        <div>Manage Users</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ url_for('manage_staffs') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-group"></i>
+                        <div>Manage Staffs</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ url_for('manage_borrowing_history') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-history"></i>
+                        <div>Manage Borrowing History</div>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        <!-- / Sidebar Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+            <!-- Navbar -->
+            <nav class="layout-navbar navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme">
+                <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                    <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                        <i class="bx bx-menu bx-sm"></i>
                     </a>
                 </div>
-
-                <ul class="menu-inner py-1">
-                    <li class="menu-item">
-                        <a href="{{ url_for('index') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                            <div>Dashboard</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="{{ url_for('manage_publishers') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-book"></i>
-                            <div>Manage Publishers</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="{{ url_for('manage_genres') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-category"></i>
-                            <div>Manage Genres</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="{{ url_for('manage_books') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-category"></i>
-                            <div>Manage Books</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="{{ url_for('manage_users') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-user"></i>
-                            <div>Manage Users</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="{{ url_for('manage_staffs') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-group"></i>
-                            <div>Manage Staffs</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="{{ url_for('manage_borrowing_history') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-history"></i>
-                            <div>Manage Borrowing History</div>
-                        </a>
-                    </li>
-                </ul>
-            </aside>
-            <!-- / Sidebar Menu -->
-
-            <!-- Layout container -->
-            <div class="layout-page">
-                <!-- Navbar -->
-                <nav class="layout-navbar navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme">
-                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-                        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
-                            <i class="bx bx-menu bx-sm"></i>
-                        </a>
-                    </div>
-                    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                        <h4 class="mb-0">Dashboard</h4>
-                    </div>
-                </nav>
-                <!-- / Navbar -->
-
-                <!-- Content wrapper -->
-                <div class="content-wrapper">
-                    <!-- Content -->
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                        {% block content %}{% endblock %}
-                    </div>
-                    <!-- / Content -->
-
-                    <!-- Footer -->
-                    <footer class="content-footer footer bg-footer-theme">
-                        <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-                            <div class="mb-2 mb-md-0">
-                                © <script>document.write(new Date().getFullYear());</script>, made with ❤️ by Sneat Template.
-                            </div>
-                        </div>
-                    </footer>
-                    <!-- / Footer -->
+                <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                    <h4 class="mb-0">Dashboard</h4>
+                    <!-- Profile Dropdown -->
+                    <ul class="navbar-nav flex-row align-items-center ms-auto">
+                        <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                               data-bs-toggle="dropdown">
+                                <div class="avatar avatar-online">
+                                    <img src="{{ url_for('static', filename='img/avatars/1.png') }}" alt
+                                         class="w-px-40 h-auto rounded-circle">
+                                </div>
+                                <!-- Display the name fetched from the session -->
+                                <span class="d-none d-md-inline-block">{{ session['user'] if 'user' in session else 'Guest' }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar avatar-online">
+                                                    <img src="{{ url_for('static', filename='img/avatars/1.png') }}" alt
+                                                         class="w-px-40 h-auto rounded-circle">
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <!-- Display the name fetched from the session -->
+                                                <span class="fw-semibold d-block">{{ session['user'] if 'user' in session else 'Guest' }}</span>
+                                                <small class="text-muted">Role: {{ session['role'] if 'role' in session
+                                                    else 'Unknown' }}</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="dropdown-divider"></div>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('logout') }}">
+                                        <i class="bx bx-power-off me-2"></i>
+                                        <span class="align-middle">Log Out</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- / Profile Dropdown -->
                 </div>
-                <!-- / Content wrapper -->
-            </div>
-            <!-- / Layout container -->
-        </div>
-        <!-- / Layout wrapper -->
-    </div>
+            </nav>
+            <!-- / Navbar -->
 
-    <!-- Core JS -->
-    <script src="{{ url_for('static', filename='vendor/libs/jquery/jquery.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/libs/popper/popper.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/js/bootstrap.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/js/menu.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+            <!-- Content wrapper -->
+            <div class="content-wrapper">
+                <!-- Content -->
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    {% block content %}{% endblock %}
+                </div>
+                <!-- / Content -->
+
+                <!-- Footer -->
+                <footer class="content-footer footer bg-footer-theme">
+                    <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                        <div class="mb-2 mb-md-0">
+                            ©
+                            <script>document.write(new Date().getFullYear());</script>
+                            , made with ❤️ by Sneat Template.
+                        </div>
+                    </div>
+                </footer>
+                <!-- / Footer -->
+            </div>
+            <!-- / Content wrapper -->
+        </div>
+        <!-- / Layout container -->
+    </div>
+    <!-- / Layout wrapper -->
+</div>
+
+<!-- Core JS -->
+<script src="{{ url_for('static', filename='vendor/libs/jquery/jquery.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/libs/popper/popper.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/js/bootstrap.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/js/menu.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

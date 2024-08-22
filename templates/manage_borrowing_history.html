@@ -28,19 +28,26 @@
             <td>
                 <!-- Các nút View và Edit -->
                 <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewModal"
-                        data-id="{{ record._id }}" data-userid="{{ record.userId }}"
-                        data-bookid="{{ record.bookId }}" data-borroweddate="{{ record.borrowedDate }}"
-                        data-duedate="{{ record.dueDate }}" data-returndate="{{ record.returnDate }}"
-                        data-status="{{ record.status }}" data-staffid="{{ record.staffId }}">
-                    View
-                </button>
-                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
-                        data-id="{{ record._id }}" data-userid="{{ record.userId }}"
-                        data-bookid="{{ record.BookId }}" data-borroweddate="{{ record.borrowedDate }}"
-                        data-duedate="{{ record.dueDate }}" data-returndate="{{ record.returnDate }}"
-                        data-status="{{ record.status }}" data-staffid="{{ record.staffId }}">
-                    Edit
-                </button>
+                    data-user="{{ users_dict[record.userId] }}"
+                    data-book="{{ books_dict[record.bookId] }}"
+                    data-staff="{{ staffs_dict[record.staffId] }}"
+                    data-borroweddate="{{ record.borrowedDate }}"
+                    data-duedate="{{ record.dueDate }}"
+                    data-returndate="{{ record.returnDate or 'None' }}"
+                    data-status="{{ record.status }}">
+                View
+            </button>
+            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
+                    data-id="{{ record._id }}"
+                    data-userid="{{ record.userId }}"
+                    data-bookid="{{ record.bookId }}"
+                    data-staffid="{{ record.staffId }}"
+                    data-borroweddate="{{ record.borrowedDate }}"
+                    data-duedate="{{ record.dueDate }}"
+                    data-returndate="{{ record.returnDate or 'None' }}"
+                    data-status="{{ record.status }}">
+                Edit
+            </button>
             </td>
         </tr>
         {% endfor %}
@@ -225,7 +232,7 @@
 <script>
 
 
-    var editModal = document.getElementById('editModal');
+var editModal = document.getElementById('editModal');
 editModal.addEventListener('show.bs.modal', function (event) {
     var button = event.relatedTarget;
     var id = button.getAttribute('data-id');
@@ -237,10 +244,11 @@ editModal.addEventListener('show.bs.modal', function (event) {
     var status = button.getAttribute('data-status');
     var staffId = button.getAttribute('data-staffid');
 
-     console.log("User ID: ", userId);
+    console.log("User ID: ", userId);
     console.log("Book ID: ", bookId);
     console.log("Staff ID: ", staffId);
 
+    // Select the input fields within the modal
     var editUserInput = editModal.querySelector('#edit_user');
     var editBookInput = editModal.querySelector('#edit_book');
     var editBorrowedDateInput = editModal.querySelector('#edit_borrowedDate');
@@ -249,28 +257,31 @@ editModal.addEventListener('show.bs.modal', function (event) {
     var editStaffInput = editModal.querySelector('#edit_staff');
     var editForm = editModal.querySelector('#editForm');
 
-    // Set các giá trị trong modal
+    // Set the values in the modal
     editUserInput.value = userId;
-    editBookInput.value = bookId;  // Đây là phần quan trọng để chọn sách đúng
+    editBookInput.value = bookId;
     editBorrowedDateInput.value = borrowedDate;
     editDueDateInput.value = dueDate;
     editStatusInput.value = status;
     editStaffInput.value = staffId;
 
-    // Set action cho form edit
+    // Set the action attribute of the form to the correct URL
     editForm.action = '/borrowing/edit/' + id;
 });
 
 
-    var viewModal = document.getElementById('viewModal');
+
+var viewModal = document.getElementById('viewModal');
 viewModal.addEventListener('show.bs.modal', function (event) {
     var button = event.relatedTarget;
-    var userId = button.getAttribute('data-userid');
-    var bookId = button.getAttribute('data-bookid');
-    var staffId = button.getAttribute('data-staffid');
+
+    // Get pre-rendered values from data attributes
+    var user = button.getAttribute('data-user');
+    var book = button.getAttribute('data-book');
+    var staff = button.getAttribute('data-staff');
     var borrowedDate = button.getAttribute('data-borroweddate');
     var dueDate = button.getAttribute('data-duedate');
-    var returnDate = button.getAttribute('data-returndate') || "None";
+    var returnDate = button.getAttribute('data-returndate');
     var status = button.getAttribute('data-status');
 
     var viewUserInput = viewModal.querySelector('#view_user');
@@ -281,15 +292,16 @@ viewModal.addEventListener('show.bs.modal', function (event) {
     var viewReturnDateInput = viewModal.querySelector('#view_returnDate');
     var viewStatusInput = viewModal.querySelector('#view_status');
 
-    // Gán giá trị cho các trường trong modal
-    viewUserInput.value = "{{ users_dict.get('" + userId + "', 'Unknown User') }}";
-    viewBookInput.value = "{{ books_dict.get('" + bookId + "', 'Unknown Book') }}";
-    viewStaffInput.value = "{{ staffs_dict.get('" + staffId + "', 'Unknown Staff') }}";
+    // Set the values in the modal
+    viewUserInput.value = user;
+    viewBookInput.value = book;
+    viewStaffInput.value = staff;
     viewBorrowedDateInput.value = borrowedDate;
     viewDueDateInput.value = dueDate;
     viewReturnDateInput.value = returnDate;
     viewStatusInput.value = status;
 });
+
 
 </script>
 

@@ -2,44 +2,42 @@
 
 {% block content %}
 <div class="row">
-    <!-- Card 1 -->
-    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-        <div class="card">
+    <!-- Card for Number of Staff -->
+    <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+        <div class="card text-white bg-primary">
             <div class="card-body">
-                <h5 class="card-title">Statistics</h5>
-                <p class="card-text">This is an example of a card in Sneat template.</p>
+                <h5 class="card-title">Staff Members</h5>
+                <p class="card-text">{{ num_staff }} staff members in the system.</p>
             </div>
         </div>
     </div>
 
-    <!-- Card 2 -->
-    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-        <div class="card">
+    <!-- Card for Number of Users -->
+    <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+        <div class="card text-white bg-success">
             <div class="card-body">
-                <h5 class="card-title">Reports</h5>
-                <p class="card-text">This is another example of a card.</p>
+                <h5 class="card-title">Users</h5>
+                <p class="card-text">{{ num_users }} users registered.</p>
             </div>
         </div>
     </div>
 
-    <!-- Card 3 -->
-    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-        <div class="card">
+    <!-- Card for Number of Books -->
+    <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+        <div class="card text-white bg-warning">
             <div class="card-body">
-                <h5 class="card-title">User Management</h5>
-                <p class="card-text">Manage users from this dashboard.</p>
+                <h5 class="card-title">Total Books</h5>
+                <p class="card-text">{{ num_books }} books in the library.</p>
             </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <!-- Example of a chart -->
-    <div class="col-12">
-        <div class="card">
+    <!-- Card for Number of Available Books -->
+    <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+        <div class="card text-white bg-danger">
             <div class="card-body">
-                <h5 class="card-title">Sales Overview</h5>
-                <div id="chart"></div> <!-- Add chart.js or other chart library here -->
+                <h5 class="card-title">Available for Borrowing</h5>
+                <p class="card-text">{{ num_available_books }} books available for borrowing.</p>
             </div>
         </div>
     </div>
