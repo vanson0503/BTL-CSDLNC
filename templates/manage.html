@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage {{ collection }}</title>
+</head>
+<body>
+    <h2>Manage {{ collection }}</h2>
+    <a href="{{ url_for('index') }}">Back to Dashboard</a><br>
+    <form method="POST">
+        <label>Add new document:</label><br>
+        <input type="text" name="field_name" placeholder="Field Name"><br>
+        <input type="text" name="field_value" placeholder="Field Value"><br>
+        <button type="submit">Add</button>
+    </form>
+    <h3>Documents:</h3>
+    <ul>
+        {% for document in documents %}
+        <li>{{ document }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

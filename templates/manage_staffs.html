@@ -1,0 +1,201 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h4>Manage Staff</h4>
+
+<!-- Table hiển thị các staff -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Shift Start</th>
+            <th>Shift End</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for staff in staffs %}
+        <tr>
+            <td>{{ staff.name }}</td>
+            <td>{{ staff.email }}</td>
+            <td>{{ staff.role }}</td>
+            <td>{{ staff.shift.startTime }}</td>
+            <td>{{ staff.shift.endTime }}</td>
+            <td>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
+                        data-id="{{ staff._id }}" data-name="{{ staff.name }}"
+                        data-email="{{ staff.email }}" data-role="{{ staff.role }}"
+                        data-starttime="{{ staff.shift.startTime }}" data-endtime="{{ staff.shift.endTime }}">
+                    Edit
+                </button>
+                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                        data-id="{{ staff._id }}" data-name="{{ staff.name }}">
+                    Delete
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Button để mở modal thêm mới staff -->
+<button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">Add Staff</button>
+
+<!-- Add Staff Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="{{ url_for('add_staff') }}" method="POST">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Add New Staff</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="role" class="form-label">Role</label>
+                    <select class="form-control" id="role" name="role" required>
+                        <option value="admin">Admin</option>
+                        <option value="staff">Staff</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="start_time" class="form-label">Shift Start Time</label>
+                    <input type="datetime-local" class="form-control" id="start_time" name="start_time" required>
+                </div>
+                <div class="mb-3">
+                    <label for="end_time" class="form-label">Shift End Time</label>
+                    <input type="datetime-local" class="form-control" id="end_time" name="end_time" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add Staff</button>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Staff Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="{{ url_for('edit_staff', id='') }}" method="POST" id="editForm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Staff</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="edit_name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="edit_name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="edit_email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_role" class="form-label">Role</label>
+                    <select class="form-control" id="edit_role" name="role" required>
+                        <option value="admin">Admin</option>
+                        <option value="staff">Staff</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_start_time" class="form-label">Shift Start Time</label>
+                    <input type="datetime-local" class="form-control" id="edit_start_time" name="start_time" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_end_time" class="form-label">Shift End Time</label>
+                    <input type="datetime-local" class="form-control" id="edit_end_time" name="end_time" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Update Staff</button>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+<!-- Delete Staff Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="{{ url_for('delete_staff', id='') }}" method="POST" id="deleteForm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Staff</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong id="delete_staff_name"></strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">Delete Staff</button>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+<!-- JavaScript để thiết lập dữ liệu cho các modal -->
+<script>
+    var editModal = document.getElementById('editModal');
+    editModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var id = button.getAttribute('data-id');
+        var name = button.getAttribute('data-name');
+        var email = button.getAttribute('data-email');
+        var role = button.getAttribute('data-role');
+        var startTime = button.getAttribute('data-starttime');
+        var endTime = button.getAttribute('data-endtime');
+
+        var modalTitle = editModal.querySelector('.modal-title');
+        var editNameInput = editModal.querySelector('#edit_name');
+        var editEmailInput = editModal.querySelector('#edit_email');
+        var editRoleInput = editModal.querySelector('#edit_role');
+        var editStartTimeInput = editModal.querySelector('#edit_start_time');
+        var editEndTimeInput = editModal.querySelector('#edit_end_time');
+        var editForm = editModal.querySelector('#editForm');
+
+        modalTitle.textContent = 'Edit Staff: ' + name;
+        editNameInput.value = name;
+        editEmailInput.value = email;
+        editRoleInput.value = role;
+        editStartTimeInput.value = startTime.slice(0, 16);  // Chỉ lấy phần YYYY-MM-DDTHH:MM
+        editEndTimeInput.value = endTime.slice(0, 16);      // Chỉ lấy phần YYYY-MM-DDTHH:MM
+        editForm.action = '/staffs/edit/' + id;
+    });
+
+    var deleteModal = document.getElementById('deleteModal');
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var id = button.getAttribute('data-id');
+        var name = button.getAttribute('data-name');
+
+        var modalTitle = deleteModal.querySelector('.modal-title');
+        var deleteStaffName = deleteModal.querySelector('#delete_staff_name');
+        var deleteForm = deleteModal.querySelector('#deleteForm');
+
+        modalTitle.textContent = 'Delete Staff: ' + name;
+        deleteStaffName.textContent = name;
+        deleteForm.action = '/staffs/delete/' + id;
+    });
+</script>
+{% endblock %}

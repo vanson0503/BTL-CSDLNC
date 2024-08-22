@@ -1,0 +1,286 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h4>Manage Books</h4>
+
+<!-- Table hiển thị các books -->
+<table class="table">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Publisher</th>
+        <th>Genres</th>
+        <th>Cover Image</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for book in books %}
+    <tr>
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td>{{ publishers_dict[book.publisherId] }}</td>
+        <td>
+            {% for genre_id in book.genreIds %}
+            {{ genres_dict[genre_id] }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </td>
+        <td>
+            {% if book.coverImage %}
+            <img src="{{ url_for('static', filename='uploads/' ~ book.coverImage) }}" alt="Cover Image"
+                 style="max-height: 100px;">
+            {% else %}
+            No Image
+            {% endif %}
+        </td>
+        <td>
+            <!-- Các nút chỉnh sửa và xóa -->
+            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
+                    data-id="{{ book._id }}" data-title="{{ book.title }}"
+                    data-author="{{ book.author }}" data-isbn="{{ book.ISBN }}"
+                    data-publishedyear="{{ book.publishedYear }}" data-summary="{{ book.summary }}"
+                    data-totalcopies="{{ book.totalCopies }}" data-availablecopies="{{ book.availableCopies }}"
+                    data-genres="{{ book.genreIds }}" data-publisher="{{ book.publisherId }}">
+                Edit
+            </button>
+            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                    data-id="{{ book._id }}" data-title="{{ book.title }}">
+                Delete
+            </button>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+<!-- Button để mở modal thêm mới book -->
+<button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">Add Book</button>
+
+<!-- Add Book Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ url_for('add_book') }}" method="POST" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Add New Book</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="author" class="form-label">Author</label>
+                        <input type="text" class="form-control" id="author" name="author" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="isbn" class="form-label">ISBN</label>
+                        <input type="text" class="form-control" id="isbn" name="isbn" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="publishedYear" class="form-label">Published Year</label>
+                        <input type="number" class="form-control" id="publishedYear" name="publishedYear" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="genres" class="form-label">Genres</label>
+                        <select multiple class="form-control" id="genres" name="genres">
+                            {% for genre in genres %}
+                            <option value="{{ genre._id }}">{{ genre.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="publisher" class="form-label">Publisher</label>
+                        <select class="form-control" id="publisher" name="publisher" required>
+                            {% for publisher in publishers %}
+                            <option value="{{ publisher._id }}">{{ publisher.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="summary" class="form-label">Summary</label>
+                        <textarea class="form-control" id="summary" name="summary" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="coverImage" class="form-label">Cover Image</label>
+                        <input type="file" class="form-control" id="coverImage" name="coverImage">
+                    </div>
+                    <div class="mb-3">
+                        <label for="totalCopies" class="form-label">Total Copies</label>
+                        <input type="number" class="form-control" id="totalCopies" name="totalCopies" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="availableCopies" class="form-label">Available Copies</label>
+                        <input type="number" class="form-control" id="availableCopies" name="availableCopies" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Book</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Book Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="{{ url_for('edit_book', id='') }}" method="POST" enctype="multipart/form-data" id="editForm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Book</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Các trường form như Add Book Modal -->
+                <div class="mb-3">
+                    <label for="edit_title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="edit_title" name="title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_author" class="form-label">Author</label>
+                    <input type="text" class="form-control" id="edit_author" name="author" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_isbn" class="form-label">ISBN</label>
+                    <input type="text" class="form-control" id="edit_isbn" name="isbn" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_publishedYear" class="form-label">Published Year</label>
+                    <input type="number" class="form-control" id="edit_publishedYear" name="publishedYear" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_genres" class="form-label">Genres</label>
+                    <select multiple class="form-control" id="edit_genres" name="genres">
+                        {% for genre in genres %}
+                        <option value="{{ genre._id }}">{{ genre.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_publisher" class="form-label">Publisher</label>
+                    <select class="form-control" id="edit_publisher" name="publisher" required>
+                        {% for publisher in publishers %}
+                        <option value="{{ publisher._id }}">{{ publisher.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_summary" class="form-label">Summary</label>
+                    <textarea class="form-control" id="edit_summary" name="summary" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_coverImage" class="form-label">Cover Image (Leave empty if not changing)</label>
+                    <input type="file" class="form-control" id="edit_coverImage" name="coverImage">
+                </div>
+                <div class="mb-3">
+                    <label for="edit_totalCopies" class="form-label">Total Copies</label>
+                    <input type="number" class="form-control" id="edit_totalCopies" name="totalCopies" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_availableCopies" class="form-label">Available Copies</label>
+                    <input type="number" class="form-control" id="edit_availableCopies" name="availableCopies" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Update Book</button>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+
+
+<!-- Delete Book Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ url_for('delete_book', id='') }}" method="POST" id="deleteForm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Book</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete <strong id="delete_book_title"></strong>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete Book</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript để thiết lập dữ liệu cho các modal -->
+<script>
+    var editModal = document.getElementById('editModal');
+    editModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var id = button.getAttribute('data-id');
+        var title = button.getAttribute('data-title');
+        var author = button.getAttribute('data-author');
+        var isbn = button.getAttribute('data-isbn');
+        var publishedYear = button.getAttribute('data-publishedyear');
+        var summary = button.getAttribute('data-summary');
+        var totalCopies = button.getAttribute('data-totalcopies');
+        var availableCopies = button.getAttribute('data-availablecopies');
+        var genres = button.getAttribute('data-genres').split(',');
+        var publisher = button.getAttribute('data-publisher');
+
+        var modalTitle = editModal.querySelector('.modal-title');
+        var editTitleInput = editModal.querySelector('#edit_title');
+        var editAuthorInput = editModal.querySelector('#edit_author');
+        var editISBNInput = editModal.querySelector('#edit_isbn');
+        var editPublishedYearInput = editModal.querySelector('#edit_publishedYear');
+        var editSummaryInput = editModal.querySelector('#edit_summary');
+        var editTotalCopiesInput = editModal.querySelector('#edit_totalCopies');
+        var editAvailableCopiesInput = editModal.querySelector('#edit_availableCopies');
+        var editGenresInput = editModal.querySelector('#edit_genres');
+        var editPublisherInput = editModal.querySelector('#edit_publisher');
+        var editForm = editModal.querySelector('#editForm');
+
+        modalTitle.textContent = 'Edit Book: ' + title;
+        editTitleInput.value = title;
+        editAuthorInput.value = author;
+        editISBNInput.value = isbn;
+        editPublishedYearInput.value = publishedYear;
+        editSummaryInput.value = summary;
+        editTotalCopiesInput.value = totalCopies;
+        editAvailableCopiesInput.value = availableCopies;
+
+        // Đặt thể loại đã chọn
+        Array.from(editGenresInput.options).forEach(function(option) {
+            option.selected = genres.includes(option.value);
+        });
+
+        // Đặt nhà xuất bản đã chọn
+        editPublisherInput.value = publisher;
+
+        editForm.action = '/books/edit/' + id;
+    });
+
+
+
+    var deleteModal = document.getElementById('deleteModal');
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var id = button.getAttribute('data-id');
+        var title = button.getAttribute('data-title');
+
+        var modalTitle = deleteModal.querySelector('.modal-title');
+        var deleteBookTitle = deleteModal.querySelector('#delete_book_title');
+        var deleteForm = deleteModal.querySelector('#deleteForm');
+
+        modalTitle.textContent = 'Delete Book: ' + title;
+        deleteBookTitle.textContent = title;
+        deleteForm.action = '/books/delete/' + id;
+    });
+</script>
+{% endblock %}

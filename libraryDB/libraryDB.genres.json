@@ -1,0 +1,35 @@
+[{
+  "_id": {
+    "$oid": "66c363a66b5f6db4305bb85c"
+  },
+  "name": "Science Fiction",
+  "description": "Fiction dealing with futuristic settings such as futuristic science and technology."
+},
+{
+  "_id": {
+    "$oid": "66c363a66b5f6db4305bb85d"
+  },
+  "name": "Fantasy",
+  "description": "Fiction set in an imaginary universe, often without any locations, events, or people from the real world."
+},
+{
+  "_id": {
+    "$oid": "66c363a66b5f6db4305bb85e"
+  },
+  "name": "Mystery",
+  "description": "Fiction dealing with the solution of a crime or the unraveling of secrets."
+},
+{
+  "_id": {
+    "$oid": "66c36b94a77b72cd462c93b0"
+  },
+  "description": "sadssadsd",
+  "name": "ádsaadsad"
+},
+{
+  "_id": {
+    "$oid": "66c6316ad059a38e90f2df20"
+  },
+  "name": "Repellat excepturi ea.",
+  "description": "sadssadsd"
+}]

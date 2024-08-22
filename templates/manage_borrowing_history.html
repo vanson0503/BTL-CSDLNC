@@ -1,0 +1,296 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h4>Manage Borrowing History</h4>
+
+<!-- Table hiển thị Borrowing History -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Book</th>
+            <th>Borrowed Date</th>
+            <th>Due Date</th>
+            <th>Return Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in borrowing_history %}
+        <tr>
+            <td>{{ users_dict[record.userId] }}</td>
+            <td>{{ books_dict[record.bookId] }}</td>
+            <td>{{ record.borrowedDate }}</td>
+            <td>{{ record.dueDate }}</td>
+            <td>{{ record.returnDate or "Not returned yet" }}</td>
+            <td>{{ record.status }}</td>
+            <td>
+                <!-- Các nút View và Edit -->
+                <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewModal"
+                        data-id="{{ record._id }}" data-userid="{{ record.userId }}"
+                        data-bookid="{{ record.bookId }}" data-borroweddate="{{ record.borrowedDate }}"
+                        data-duedate="{{ record.dueDate }}" data-returndate="{{ record.returnDate }}"
+                        data-status="{{ record.status }}" data-staffid="{{ record.staffId }}">
+                    View
+                </button>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
+                        data-id="{{ record._id }}" data-userid="{{ record.userId }}"
+                        data-bookid="{{ record.BookId }}" data-borroweddate="{{ record.borrowedDate }}"
+                        data-duedate="{{ record.dueDate }}" data-returndate="{{ record.returnDate }}"
+                        data-status="{{ record.status }}" data-staffid="{{ record.staffId }}">
+                    Edit
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<!-- Button để mở modal thêm mới Borrowing History -->
+<button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">Add Borrowing Record</button>
+
+<!-- Add Borrowing History Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="{{ url_for('add_borrowing') }}" method="POST">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Add New Borrowing Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="user" class="form-label">User</label>
+                    <select class="form-control" id="user" name="user" required>
+                        {% for user in users %}
+                        <option value="{{ user._id }}">{{ user.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="book" class="form-label">Book</label>
+                    <select class="form-control" id="book" name="book" required>
+                        {% for book in books %}
+                        <option value="{{ book._id }}">{{ book.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="borrowedDate" class="form-label">Borrowed Date</label>
+                    <input type="datetime-local" class="form-control" id="borrowedDate" name="borrowedDate" required>
+                </div>
+                <div class="mb-3">
+                    <label for="dueDate" class="form-label">Due Date</label>
+                    <input type="datetime-local" class="form-control" id="dueDate" name="dueDate" required>
+                </div>
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-control" id="status" name="status" required>
+                        <option value="borrowed">Borrowed</option>
+                        <option value="returned">Returned</option>
+                        <option value="overdue">Overdue</option>
+                        <option value="reserved">Reserved</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="fulfilled">Fulfilled</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="staff" class="form-label">Staff</label>
+                    <select class="form-control" id="staff" name="staff" required>
+                        {% for staff in staffs %}
+                        <option value="{{ staff._id }}">{{ staff.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add Borrowing Record</button>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Borrowing History Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="{{ url_for('edit_borrowing', id='') }}" method="POST" id="editForm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Borrowing Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="edit_user" class="form-label">User</label>
+                    <select class="form-control" id="edit_user" name="user" required>
+                        {% for user in users %}
+                        <option value="{{ user._id }}">{{ user.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_book" class="form-label">Book</label>
+                    <select class="form-control" id="edit_book" name="book" required>
+                        {% for book in books %}
+                        <option value="{{ book._id }}">{{ book.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_borrowedDate" class="form-label">Borrowed Date</label>
+                    <input type="datetime-local" class="form-control" id="edit_borrowedDate" name="borrowedDate" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_dueDate" class="form-label">Due Date</label>
+                    <input type="datetime-local" class="form-control" id="edit_dueDate" name="dueDate" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_status" class="form-label">Status</label>
+                    <select class="form-control" id="edit_status" name="status" required>
+                        <option value="borrowed">Borrowed</option>
+                        <option value="returned">Returned</option>
+                        <option value="overdue">Overdue</option>
+                        <option value="reserved">Reserved</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="fulfilled">Fulfilled</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_staff" class="form-label">Staff</label>
+                    <select class="form-control" id="edit_staff" name="staff" required>
+                        {% for staff in staffs %}
+                        <option value="{{ staff._id }}">{{ staff.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Update Borrowing Record</button>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+<!-- View Borrowing History Modal -->
+<div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="viewModalLabel">Borrowing Record Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3">
+                <label for="view_user" class="form-label">User</label>
+                <input type="text" class="form-control" id="view_user" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="view_book" class="form-label">Book</label>
+                <input type="text" class="form-control" id="view_book" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="view_borrowedDate" class="form-label">Borrowed Date</label>
+                <input type="text" class="form-control" id="view_borrowedDate" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="view_dueDate" class="form-label">Due Date</label>
+                <input type="text" class="form-control" id="view_dueDate" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="view_returnDate" class="form-label">Return Date</label>
+                <input type="text" class="form-control" id="view_returnDate" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="view_status" class="form-label">Status</label>
+                <input type="text" class="form-control" id="view_status" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="view_staff" class="form-label">Staff</label>
+                <input type="text" class="form-control" id="view_staff" disabled>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+    var editModal = document.getElementById('editModal');
+editModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var id = button.getAttribute('data-id');
+    var userId = button.getAttribute('data-userid');
+    var bookId = button.getAttribute('data-bookid');
+    var borrowedDate = button.getAttribute('data-borroweddate');
+    var dueDate = button.getAttribute('data-duedate');
+    var returnDate = button.getAttribute('data-returndate') || "Not returned yet";
+    var status = button.getAttribute('data-status');
+    var staffId = button.getAttribute('data-staffid');
+
+     console.log("User ID: ", userId);
+    console.log("Book ID: ", bookId);
+    console.log("Staff ID: ", staffId);
+
+    var editUserInput = editModal.querySelector('#edit_user');
+    var editBookInput = editModal.querySelector('#edit_book');
+    var editBorrowedDateInput = editModal.querySelector('#edit_borrowedDate');
+    var editDueDateInput = editModal.querySelector('#edit_dueDate');
+    var editStatusInput = editModal.querySelector('#edit_status');
+    var editStaffInput = editModal.querySelector('#edit_staff');
+    var editForm = editModal.querySelector('#editForm');
+
+    // Set các giá trị trong modal
+    editUserInput.value = userId;
+    editBookInput.value = bookId;  // Đây là phần quan trọng để chọn sách đúng
+    editBorrowedDateInput.value = borrowedDate;
+    editDueDateInput.value = dueDate;
+    editStatusInput.value = status;
+    editStaffInput.value = staffId;
+
+    // Set action cho form edit
+    editForm.action = '/borrowing/edit/' + id;
+});
+
+
+    var viewModal = document.getElementById('viewModal');
+viewModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var userId = button.getAttribute('data-userid');
+    var bookId = button.getAttribute('data-bookid');
+    var staffId = button.getAttribute('data-staffid');
+    var borrowedDate = button.getAttribute('data-borroweddate');
+    var dueDate = button.getAttribute('data-duedate');
+    var returnDate = button.getAttribute('data-returndate') || "None";
+    var status = button.getAttribute('data-status');
+
+    var viewUserInput = viewModal.querySelector('#view_user');
+    var viewBookInput = viewModal.querySelector('#view_book');
+    var viewStaffInput = viewModal.querySelector('#view_staff');
+    var viewBorrowedDateInput = viewModal.querySelector('#view_borrowedDate');
+    var viewDueDateInput = viewModal.querySelector('#view_dueDate');
+    var viewReturnDateInput = viewModal.querySelector('#view_returnDate');
+    var viewStatusInput = viewModal.querySelector('#view_status');
+
+    // Gán giá trị cho các trường trong modal
+    viewUserInput.value = "{{ users_dict.get('" + userId + "', 'Unknown User') }}";
+    viewBookInput.value = "{{ books_dict.get('" + bookId + "', 'Unknown Book') }}";
+    viewStaffInput.value = "{{ staffs_dict.get('" + staffId + "', 'Unknown Staff') }}";
+    viewBorrowedDateInput.value = borrowedDate;
+    viewDueDateInput.value = dueDate;
+    viewReturnDateInput.value = returnDate;
+    viewStatusInput.value = status;
+});
+
+</script>
+
+{% endblock %}

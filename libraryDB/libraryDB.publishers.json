@@ -1,0 +1,18 @@
+[{
+  "_id": {
+    "$oid": "66c3639d6b5f6db4305bb85a"
+  },
+  "name": "Penguin Random House",
+  "address": "1745 Broadway, New York, NY 10019, USA",
+  "phone": "212-782-9000",
+  "email": "contact@penguinrandomhouse.com"
+},
+{
+  "_id": {
+    "$oid": "66c3639d6b5f6db4305bb85b"
+  },
+  "name": "HarperCollins",
+  "address": "195 Broadway, New York, NY 10007, USA",
+  "phone": "212-207-7000",
+  "email": "contact@harpercollins.com"
+}]

@@ -1,0 +1,30 @@
+[{
+  "_id": {
+    "$oid": "66c3670ed6e75b490d60ce10"
+  },
+  "name": "Alice Johnson",
+  "email": "alice@library.com",
+  "password": "12345678",
+  "role": "admin",
+  "shift": {
+    "startTime": {
+      "$date": "2024-08-19T08:00:00.000Z"
+    },
+    "endTime": {
+      "$date": "2024-08-19T16:00:00.000Z"
+    }
+  }
+},
+{
+  "_id": {
+    "$oid": "66c634e333780c949f42e75e"
+  },
+  "name": "dsad",
+  "email": "vanson05032002@gmail.com",
+  "password": "12345678",
+  "role": "admin",
+  "shift": {
+    "startTime": "2024-08-02T01:41",
+    "endTime": "2024-12-22T01:41"
+  }
+}]

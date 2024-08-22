@@ -1,0 +1,27 @@
+[{
+  "_id": {
+    "$oid": "66c363e06b5f6db4305bb864"
+  },
+  "name": "Charlie Brown",
+  "email": "charlie.brown@example.com",
+  "address": "123 Main St, Springfield, USA",
+  "phone": "555-1234"
+},
+{
+  "_id": {
+    "$oid": "66c363e06b5f6db4305bb865"
+  },
+  "name": "Lucy Van Pelt",
+  "email": "lucy.vanpelt@example.com",
+  "address": "456 Elm St, Springfield, USA",
+  "phone": "555-5678"
+},
+{
+  "_id": {
+    "$oid": "66c6340bb1246906c6f4f425"
+  },
+  "name": "Repellat excepturi ea.",
+  "email": "vanson05032002@gmail.com",
+  "address": "sda",
+  "phone": "(201) 405-055"
+}]

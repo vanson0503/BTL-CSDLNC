@@ -1,0 +1,22 @@
+[{
+  "_id": {
+    "$oid": "66c363e76b5f6db4305bb866"
+  },
+  "userId": {
+    "$oid": "66c363e06b5f6db4305bb864"
+  },
+  "bookId": {
+    "$oid": "66c363be6b5f6db4305bb85f"
+  },
+  "borrowedDate": {
+    "$date": "2024-08-01T00:00:00.000Z"
+  },
+  "dueDate": {
+    "$date": "2024-08-21T00:00:00.000Z"
+  },
+  "returnDate": null,
+  "status": "borrowed",
+  "staffId": {
+    "$oid": "66c363d76b5f6db4305bb863"
+  }
+}]

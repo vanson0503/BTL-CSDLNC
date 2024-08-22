@@ -1,0 +1,150 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h4>Manage Genres</h4>
+
+<!-- Table hiển thị các genres -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for genre in genres %}
+        <tr>
+            <td>{{ genre.name }}</td>
+            <td>{{ genre.description }}</td>
+            <td>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
+                        data-id="{{ genre._id }}" data-name="{{ genre.name }}" data-description="{{ genre.description }}">
+                    Edit
+                </button>
+                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                        data-id="{{ genre._id }}" data-name="{{ genre.name }}">
+                    Delete
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Button để mở modal thêm mới genre -->
+<button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">Add Genre</button>
+
+<!-- Add Genre Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="{{ url_for('add_genre') }}" method="POST">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Add New Genre</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <input type="text" class="form-control" id="description" name="description" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add Genre</button>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Genre Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="{{ url_for('edit_genre', id='') }}" method="POST" id="editForm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Genre</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="edit_name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="edit_name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_description" class="form-label">Description</label>
+                    <input type="text" class="form-control" id="edit_description" name="description" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Update Genre</button>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+<!-- Delete Genre Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="{{ url_for('delete_genre', id='') }}" method="POST" id="deleteForm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Genre</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong id="delete_genre_name"></strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">Delete Genre</button>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+<!-- JavaScript để thiết lập dữ liệu cho các modal -->
+<script>
+    var editModal = document.getElementById('editModal');
+    editModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var id = button.getAttribute('data-id');
+        var name = button.getAttribute('data-name');
+        var description = button.getAttribute('data-description');
+
+        var modalTitle = editModal.querySelector('.modal-title');
+        var editNameInput = editModal.querySelector('#edit_name');
+        var editDescriptionInput = editModal.querySelector('#edit_description');
+        var editForm = editModal.querySelector('#editForm');
+
+        modalTitle.textContent = 'Edit Genre: ' + name;
+        editNameInput.value = name;
+        editDescriptionInput.value = description;
+        editForm.action = '/genres/edit/' + id;
+    });
+
+    var deleteModal = document.getElementById('deleteModal');
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var id = button.getAttribute('data-id');
+        var name = button.getAttribute('data-name');
+
+        var modalTitle = deleteModal.querySelector('.modal-title');
+        var deleteGenreName = deleteModal.querySelector('#delete_genre_name');
+        var deleteForm = deleteModal.querySelector('#deleteForm');
+
+        modalTitle.textContent = 'Delete Genre: ' + name;
+        deleteGenreName.textContent = name;
+        deleteForm.action = '/genres/delete/' + id;
+    });
+</script>
+{% endblock %}

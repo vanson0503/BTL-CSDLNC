@@ -1,0 +1,75 @@
+[{
+  "_id": {
+    "$oid": "66c363be6b5f6db4305bb85f"
+  },
+  "title": "Dune",
+  "author": "Frank Herbert",
+  "ISBN": "978-0441013593",
+  "publishedYear": 1965,
+  "genreIds": [
+    {
+      "$oid": "66c363a66b5f6db4305bb85c"
+    },
+    {
+      "$oid": "66c363a66b5f6db4305bb85d"
+    }
+  ],
+  "publisherId": {
+    "$oid": "66c3639d6b5f6db4305bb85b"
+  },
+  "summary": "A science fiction novel about politics, religion, and ecology on the desert planet Arrakis.",
+  "coverImage": "Screenshot_2024-07-30_101147.png",
+  "totalCopies": 10,
+  "availableCopies": 5
+},
+{
+  "_id": {
+    "$oid": "66c363be6b5f6db4305bb860"
+  },
+  "title": "The Hobbit",
+  "author": "J.R.R. Tolkien",
+  "ISBN": "978-0261103344",
+  "publishedYear": 1937,
+  "genreIds": [
+    {
+      "$oid": "66c363a66b5f6db4305bb85c"
+    },
+    {
+      "$oid": "66c363a66b5f6db4305bb85d"
+    }
+  ],
+  "publisherId": {
+    "$oid": "66c3639d6b5f6db4305bb85b"
+  },
+  "summary": "A fantasy novel about the adventures of a hobbit named Bilbo Baggins.",
+  "coverImage": "Screenshot_2024-08-02_210815.png",
+  "totalCopies": 15,
+  "availableCopies": 7
+},
+{
+  "_id": {
+    "$oid": "66c363be6b5f6db4305bb861"
+  },
+  "title": "The Hound of the Baskervilles",
+  "author": "Arthur Conan Doyle",
+  "ISBN": "978-0486282145",
+  "publishedYear": 1902,
+  "genreIds": [
+    {
+      "$oid": "66c363a66b5f6db4305bb85c"
+    },
+    {
+      "$oid": "66c363a66b5f6db4305bb85d"
+    },
+    {
+      "$oid": "66c363a66b5f6db4305bb85e"
+    }
+  ],
+  "publisherId": {
+    "$oid": "66c3639d6b5f6db4305bb85a"
+  },
+  "summary": "A mystery novel featuring Sherlock Holmes.",
+  "coverImage": "Screenshot_2024-08-21_001453.png",
+  "totalCopies": 7,
+  "availableCopies": 3
+}]
